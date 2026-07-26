@@ -1,5 +1,8 @@
 local stuff = {}
-local gameList = game:GetService("HttpService"):JSONDecode(game:HttpGet(getgitpath("src").. "gameslist.json"))
+local ok, gl = pcall(function()
+    return game:GetService("HttpService"):JSONDecode(game:HttpGet(getgitpath("src").. "gameslist.json"))
+end)
+local gameList = ok and gl or {}
 
 local COLORS = {
     bg = Color3.fromRGB(12, 12, 15),

@@ -37,7 +37,7 @@ pcall(function() game:GetService("GuiService"):SetGameplayPausedNotificationEnab
 
 local ok, err = pcall(function()
     print("[Universal by vkojii] Fetching UI...")
-    loadstring(game:HttpGet(BASE .. "src/ui.lua", true))()
+    loadstring(game:HttpGet(BASE .. "src/ui.lua?v=" .. tick(), true))()
 end)
 
 if not ok then

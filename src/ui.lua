@@ -407,7 +407,7 @@ uis.InputChanged:Connect(function(input)
     end
 end)
 
-elements = loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()
+elements = loadstring(game:HttpGet(getgitpath("src").."elements.lua?v=" .. tick()))()
 _G.elements = elements
 
 local function makeCard(parent, order)
@@ -528,7 +528,7 @@ local savedConfig = {settings = {disable_3d_rendering = false, auto_rejoin_on_ki
 
 local gameFile = getgitpath("games") .. tostring(game.PlaceId) .. ".lua"
 local ok, gamePath = pcall(function() return game:HttpGet(gameFile) end)
-local gameList = https:JSONDecode(game:HttpGet(getgitpath("src").."gameslist.json"))
+local gameList = https:JSONDecode(game:HttpGet(getgitpath("src").."gameslist.json?v=" .. tick()))
 
 if not ok or not gamePath or gamePath == "" or gamePath == "404: Not Found" then
     elements:Unsupported(sections.Game.container, function()
