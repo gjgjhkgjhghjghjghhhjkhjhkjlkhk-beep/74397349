@@ -34,14 +34,18 @@ return function(section, data)
     local function pressE()
         pcall(function()
             local vim = game:GetService("VirtualInputManager")
-            vim:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+            local cam = workspace.CurrentCamera
+            local cx, cy = cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2
+            vim:SendMouseButtonEvent(cx, cy, 0, true, game, 1)
             task.wait(0.1)
-            vim:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+            vim:SendMouseButtonEvent(cx, cy, 0, false, game, 1)
         end)
         pcall(function()
-            keypress(0x45)
+            local cam = workspace.CurrentCamera
+            local cx, cy = cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2
+            mouse1press()
             task.wait(0.1)
-            keyrelease(0x45)
+            mouse1release()
         end)
     end
 
