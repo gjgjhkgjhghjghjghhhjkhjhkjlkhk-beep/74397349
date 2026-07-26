@@ -21,12 +21,33 @@ return function(section, data)
 
     getgenv().farmActive = false
 
+    local FISH_POS = CFrame.new(44.133, 5.129, -78)
+
+    local function tpTo(pos)
+        local char = plr.Character
+        if char and char:FindFirstChild("HumanoidRootPart") then
+            char.HumanoidRootPart.CFrame = pos
+        end
+    end
+
     local function getRod()
         local char = plr.Character
         if char then
-            return char:FindFirstChild("FishingRod") or char:FindFirstChildOfClass("Tool")
+            for _, v in ipairs(char:GetChildren()) do
+                if v:IsA("Tool") or v.Name:find("Rod") or v.Name:find("Fish") then
+                    return v
+                end
+            end
         end
         return nil
+    end
+
+    local function isUnderwater()
+        local char = plr.Character
+        if char and char:FindFirstChild("HumanoidRootPart") then
+            return char.HumanoidRootPart.Position.Y < 3
+        end
+        return false
     end
 
     elements:Toggle("Auto Farm", section, setdata.autoFarm, function(v)
@@ -36,6 +57,16 @@ return function(section, data)
             task.spawn(function()
                 while getgenv().farmActive do
                     pcall(function()
+                        if isUnderwater() then
+                            SharkChaseResult:FireServer("Escape")
+                            task.wait(1)
+                            tpTo(FISH_POS)
+                            task.wait(0.5)
+                        end
+
+                        tpTo(FISH_POS)
+                        task.wait(0.3)
+
                         FishingZone:FireServer("Enter")
                         task.wait(0.5)
 
@@ -62,25 +93,19 @@ return function(section, data)
 
                         Fishing:FireServer("Started", 1)
 
-                        task.wait(0.5)
-                    end)
-                    task.wait(2)
-                end
-            end)
-
-            task.spawn(function()
-                while getgenv().farmActive do
-                    pcall(function()
-                        local char = plr.Character
-                        if char and char:FindFirstChild("HumanoidRootPart") then
-                            local pos = char.HumanoidRootPart.Position
-                            if pos.Y < 5 then
-                                SharkChaseResult:FireServer("Escape")
-                                task.wait(0.5)
-                            end
+                        for i = 1, 20 do
+                            if not getgenv().farmActive then break end
+                            task.wait(0.5)
+                            pcall(function()
+                                if isUnderwater() then
+                                    SharkChaseResult:FireServer("Escape")
+                                    task.wait(1)
+                                    tpTo(FISH_POS)
+                                end
+                            end)
                         end
                     end)
-                    task.wait(0.5)
+                    task.wait(1)
                 end
             end)
         end
