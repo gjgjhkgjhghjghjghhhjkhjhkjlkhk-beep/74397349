@@ -33,16 +33,29 @@ return function(section, data)
 
     local function pressE()
         pcall(function()
+            for _, obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("ProximityPrompt") then
+                    obj.HoldDuration = 0
+                    obj:InputHoldBegin()
+                    task.wait(0.1)
+                    obj:InputHoldEnd()
+                end
+            end
+        end)
+        pcall(function()
             local vim = game:GetService("VirtualInputManager")
             local cam = workspace.CurrentCamera
             local cx, cy = cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2
-            vim:SendMouseButtonEvent(cx, cy, 0, true, game, 1)
-            task.wait(0.1)
-            vim:SendMouseButtonEvent(cx, cy, 0, false, game, 1)
+            vim:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+            task.wait(0.15)
+            vim:SendKeyEvent(false, Enum.KeyCode.E, false, game)
         end)
         pcall(function()
-            local cam = workspace.CurrentCamera
-            local cx, cy = cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2
+            keypress(0x45)
+            task.wait(0.15)
+            keyrelease(0x45)
+        end)
+        pcall(function()
             mouse1press()
             task.wait(0.1)
             mouse1release()
