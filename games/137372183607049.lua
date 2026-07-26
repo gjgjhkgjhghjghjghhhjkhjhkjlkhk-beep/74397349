@@ -12,7 +12,6 @@ return function(section, data)
     local FloatCreate = Handler:WaitForChild("FloatCreate")
     local FloatUpdate = Handler:WaitForChild("FloatUpdate")
     local FloatDestroy = Handler:WaitForChild("FloatDestroy")
-    local SharkRunStart = Handler:WaitForChild("SharkRunStart")
     local SharkChaseResult = Handler:WaitForChild("SharkChaseResult")
 
     local setdata = data[tostring(game.PlaceId)] or {}
@@ -22,16 +21,42 @@ return function(section, data)
 
     getgenv().farmActive = false
 
-    local function getRod()
-        local char = plr.Character
-        if char then
-            for _, v in ipairs(char:GetChildren()) do
-                if v:IsA("Tool") or v.Name:find("Rod") or v.Name:find("Fish") then
-                    return v
+    local function tpTo(cf)
+        pcall(function()
+            local char = plr.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                char.HumanoidRootPart.CFrame = cf
+                char.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+            end
+        end)
+    end
+
+    local function findProximityPrompt()
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("ProximityPrompt") and obj.Enabled then
+                local dist = (obj.Parent and obj.Parent:IsA("BasePart"))
+                    and (plr.Character and plr.Character:FindFirstChild("HumanoidRootPart"))
+                    and (obj.Parent.Position - plr.Character.HumanoidRootPart.Position).Magnitude
+                    or 999
+                if dist < 20 then
+                    return obj
                 end
             end
         end
         return nil
+    end
+
+    local function triggerPrompt()
+        pcall(function()
+            local prompt = findProximityPrompt()
+            if prompt then
+                prompt:InputHoldBegin()
+                task.wait(0.3)
+                prompt:InputHoldEnd()
+                return true
+            end
+        end)
+        return false
     end
 
     local sharkCaught = Instance.new("BindableEvent")
@@ -49,19 +74,28 @@ return function(section, data)
         FishingZone:FireServer("Enter")
         task.wait(1)
 
+        triggerPrompt()
+        task.wait(0.5)
+
+        if not getgenv().farmActive then return end
+
         FishingFunnel:FireServer("Started")
         task.wait(0.4)
-
         FishingFunnel:FireServer("Thrown")
         task.wait(0.4)
-
         FishingFunnel:FireServer("Landed")
         task.wait(0.5)
 
         local char = plr.Character
         if char and char:FindFirstChild("HumanoidRootPart") then
             local pos = char.HumanoidRootPart.Position
-            local rod = getRod()
+            local rod = nil
+            for _, v in ipairs(char:GetChildren()) do
+                if v:IsA("Tool") or v.Name:find("Rod") or v.Name:find("Fish") then
+                    rod = v
+                    break
+                end
+            end
             FloatCreate:FireServer(
                 CFrame.new(pos.X, pos.Y, pos.Z),
                 rod
@@ -69,7 +103,6 @@ return function(section, data)
         end
 
         task.wait(0.5)
-
         Fishing:FireServer("Started", 1)
 
         local sharkInfo = nil
@@ -88,17 +121,15 @@ return function(section, data)
 
         if sharkInfo then
             task.wait(0.5)
-
             pcall(function()
-                local char = plr.Character
-                if char and char:FindFirstChild("HumanoidRootPart") then
-                    local pos = char.HumanoidRootPart.Position
-                    char.HumanoidRootPart.CFrame = CFrame.new(pos.X + 100, pos.Y + 50, pos.Z + 100)
-                    char.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                local ch = plr.Character
+                if ch and ch:FindFirstChild("HumanoidRootPart") then
+                    local p = ch.HumanoidRootPart.Position
+                    ch.HumanoidRootPart.CFrame = CFrame.new(p.X + 100, p.Y + 50, p.Z + 100)
+                    ch.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
                 end
             end)
             task.wait(1)
-
             SharkChaseResult:FireServer("Escape")
             task.wait(2)
         end
