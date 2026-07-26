@@ -31,32 +31,18 @@ return function(section, data)
         end)
     end
 
-    local function findProximityPrompt()
-        for _, obj in ipairs(workspace:GetDescendants()) do
-            if obj:IsA("ProximityPrompt") and obj.Enabled then
-                local dist = (obj.Parent and obj.Parent:IsA("BasePart"))
-                    and (plr.Character and plr.Character:FindFirstChild("HumanoidRootPart"))
-                    and (obj.Parent.Position - plr.Character.HumanoidRootPart.Position).Magnitude
-                    or 999
-                if dist < 20 then
-                    return obj
-                end
-            end
-        end
-        return nil
-    end
-
-    local function triggerPrompt()
+    local function pressE()
         pcall(function()
-            local prompt = findProximityPrompt()
-            if prompt then
-                prompt:InputHoldBegin()
-                task.wait(0.3)
-                prompt:InputHoldEnd()
-                return true
-            end
+            local vim = game:GetService("VirtualInputManager")
+            vim:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+            task.wait(0.1)
+            vim:SendKeyEvent(false, Enum.KeyCode.E, false, game)
         end)
-        return false
+        pcall(function()
+            keypress(0x45)
+            task.wait(0.1)
+            keyrelease(0x45)
+        end)
     end
 
     local sharkCaught = Instance.new("BindableEvent")
@@ -83,7 +69,7 @@ return function(section, data)
         FishingZone:FireServer("Enter")
         task.wait(1)
 
-        triggerPrompt()
+        pressE()
         task.wait(0.5)
 
         if not getgenv().farmActive then return end
