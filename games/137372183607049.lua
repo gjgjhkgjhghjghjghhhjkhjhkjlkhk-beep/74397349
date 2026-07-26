@@ -71,6 +71,15 @@ return function(section, data)
     end)
 
     local function doFishingCycle()
+        pcall(function()
+            local char = plr.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                char:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(44, 5, -78)
+                char:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, 0, 0)
+            end
+        end)
+        task.wait(0.5)
+
         FishingZone:FireServer("Enter")
         task.wait(1)
 
