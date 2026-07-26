@@ -16,10 +16,27 @@ return function(section, data)
 
     local setdata = data[tostring(game.PlaceId)] or {}
     setdata.autoFarm = setdata.autoFarm or false
+    setdata.autoRebirth = setdata.autoRebirth or false
     data[tostring(game.PlaceId)] = setdata
     pcall(function() writefile("BrainrotPolice/Config.json", game:GetService("HttpService"):JSONEncode(data)) end)
 
     getgenv().farmActive = false
+    getgenv().rebirthActive = false
+
+    local RebirthRemote = nil
+    pcall(function()
+        RebirthRemote = Handler:WaitForChild("Rebirth", 3)
+    end)
+    if not RebirthRemote then
+        pcall(function()
+            for _, v in ipairs(Handler:GetChildren()) do
+                if v.Name:lower():find("rebirth") or v.Name:lower():find("reborn") or v.Name:lower():find("reset") then
+                    RebirthRemote = v
+                    break
+                end
+            end
+        end)
+    end
 
     local function tpTo(cf)
         pcall(function()
@@ -162,6 +179,32 @@ return function(section, data)
                         doFishingCycle()
                     end)
                     task.wait(1)
+                end
+            end)
+        end
+    end)
+
+    elements:Toggle("Auto Rebirth", section, setdata.autoRebirth, function(v)
+        setdata.autoRebirth = v
+        getgenv().rebirthActive = v
+        if v then
+            task.spawn(function()
+                while getgenv().rebirthActive do
+                    pcall(function()
+                        if RebirthRemote then
+                            RebirthRemote:FireServer()
+                        else
+                            pcall(function()
+                                for _, v in ipairs(Handler:GetChildren()) do
+                                    if v.Name:lower():find("rebirth") or v.Name:lower():find("reborn") then
+                                        v:FireServer()
+                                        break
+                                    end
+                                end
+                            end)
+                        end
+                    end)
+                    task.wait(3)
                 end
             end)
         end
