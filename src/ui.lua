@@ -537,7 +537,7 @@ if not ok or not gamePath or gamePath == "" or gamePath == "404: Not Found" then
 else
     pcall(function()
         local gameModule = loadstring(gamePath)()
-        gameModule(sections.Game.container, savedConfig)
+        gameModule(sections.Game.scroll, savedConfig)
     end)
 end
 
