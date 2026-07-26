@@ -12,6 +12,7 @@ return function(section, data)
     local FloatCreate = Handler:WaitForChild("FloatCreate")
     local FloatUpdate = Handler:WaitForChild("FloatUpdate")
     local FloatDestroy = Handler:WaitForChild("FloatDestroy")
+    local SharkRunStart = Handler:WaitForChild("SharkRunStart")
     local SharkChaseResult = Handler:WaitForChild("SharkChaseResult")
 
     local setdata = data[tostring(game.PlaceId)] or {}
@@ -21,13 +22,16 @@ return function(section, data)
 
     getgenv().farmActive = false
 
-    local FISH_POS = CFrame.new(44.133, 5.129, -78)
+    local fishZoneCF = CFrame.new(44.133, 5.129, -78)
 
-    local function tpTo(pos)
-        local char = plr.Character
-        if char and char:FindFirstChild("HumanoidRootPart") then
-            char.HumanoidRootPart.CFrame = pos
-        end
+    local function tpTo(cf)
+        pcall(function()
+            local char = plr.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                char.HumanoidRootPart.CFrame = cf
+                char.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+            end
+        end)
     end
 
     local function getRod()
@@ -42,12 +46,71 @@ return function(section, data)
         return nil
     end
 
-    local function isUnderwater()
+    local sharkCaught = Instance.new("BindableEvent")
+
+    pcall(function()
+        local SharkChaseStart = Handler:WaitForChild("SharkChaseStart", 5)
+        if SharkChaseStart then
+            SharkChaseStart.OnClientEvent:Connect(function(info)
+                sharkCaught:Fire(info)
+            end)
+        end
+    end)
+
+    local function doFishingCycle()
+        tpTo(fishZoneCF)
+        task.wait(0.3)
+
+        FishingZone:FireServer("Enter")
+        task.wait(0.5)
+
+        FishingFunnel:FireServer("Started")
+        task.wait(0.4)
+
+        FishingFunnel:FireServer("Thrown")
+        task.wait(0.4)
+
+        FishingFunnel:FireServer("Landed")
+        task.wait(0.5)
+
         local char = plr.Character
         if char and char:FindFirstChild("HumanoidRootPart") then
-            return char.HumanoidRootPart.Position.Y < 3
+            local pos = char.HumanoidRootPart.Position
+            local rod = getRod()
+            FloatCreate:FireServer(
+                CFrame.new(pos.X, pos.Y, pos.Z),
+                rod
+            )
         end
-        return false
+
+        task.wait(0.5)
+
+        Fishing:FireServer("Started", 1)
+
+        local sharkInfo = nil
+        local conn
+        conn = sharkCaught.Event:Connect(function(info)
+            sharkInfo = info
+        end)
+
+        for i = 1, 30 do
+            if not getgenv().farmActive then break end
+            if sharkInfo then break end
+            task.wait(0.5)
+        end
+
+        conn:Disconnect()
+
+        if sharkInfo then
+            task.wait(1)
+            SharkChaseResult:FireServer("Escape")
+            task.wait(2)
+        end
+
+        pcall(function()
+            FloatDestroy:FireServer()
+        end)
+        task.wait(0.5)
     end
 
     elements:Toggle("Auto Farm", section, setdata.autoFarm, function(v)
@@ -57,53 +120,7 @@ return function(section, data)
             task.spawn(function()
                 while getgenv().farmActive do
                     pcall(function()
-                        if isUnderwater() then
-                            SharkChaseResult:FireServer("Escape")
-                            task.wait(1)
-                            tpTo(FISH_POS)
-                            task.wait(0.5)
-                        end
-
-                        tpTo(FISH_POS)
-                        task.wait(0.3)
-
-                        FishingZone:FireServer("Enter")
-                        task.wait(0.5)
-
-                        FishingFunnel:FireServer("Started")
-                        task.wait(0.3)
-
-                        FishingFunnel:FireServer("Thrown")
-                        task.wait(0.3)
-
-                        FishingFunnel:FireServer("Landed")
-                        task.wait(0.3)
-
-                        local char = plr.Character
-                        if char and char:FindFirstChild("HumanoidRootPart") then
-                            local pos = char.HumanoidRootPart.Position
-                            local rod = getRod()
-                            FloatCreate:FireServer(
-                                CFrame.new(pos.X, pos.Y, pos.Z),
-                                rod
-                            )
-                        end
-
-                        task.wait(0.5)
-
-                        Fishing:FireServer("Started", 1)
-
-                        for i = 1, 20 do
-                            if not getgenv().farmActive then break end
-                            task.wait(0.5)
-                            pcall(function()
-                                if isUnderwater() then
-                                    SharkChaseResult:FireServer("Escape")
-                                    task.wait(1)
-                                    tpTo(FISH_POS)
-                                end
-                            end)
-                        end
+                        doFishingCycle()
                     end)
                     task.wait(1)
                 end
