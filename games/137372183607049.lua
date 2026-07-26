@@ -22,18 +22,6 @@ return function(section, data)
 
     getgenv().farmActive = false
 
-    local fishZoneCF = CFrame.new(44.133, 5.129, -105)
-
-    local function tpTo(cf)
-        pcall(function()
-            local char = plr.Character
-            if char and char:FindFirstChild("HumanoidRootPart") then
-                char.HumanoidRootPart.CFrame = cf
-                char.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-            end
-        end)
-    end
-
     local function getRod()
         local char = plr.Character
         if char then
@@ -58,11 +46,8 @@ return function(section, data)
     end)
 
     local function doFishingCycle()
-        tpTo(fishZoneCF)
-        task.wait(0.3)
-
         FishingZone:FireServer("Enter")
-        task.wait(0.5)
+        task.wait(1)
 
         FishingFunnel:FireServer("Started")
         task.wait(0.4)
