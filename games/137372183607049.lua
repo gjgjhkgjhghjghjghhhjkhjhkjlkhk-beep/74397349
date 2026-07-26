@@ -87,7 +87,18 @@ return function(section, data)
         conn:Disconnect()
 
         if sharkInfo then
+            task.wait(0.5)
+
+            pcall(function()
+                local char = plr.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    local pos = char.HumanoidRootPart.Position
+                    char.HumanoidRootPart.CFrame = CFrame.new(pos.X + 100, pos.Y + 50, pos.Z + 100)
+                    char.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                end
+            end)
             task.wait(1)
+
             SharkChaseResult:FireServer("Escape")
             task.wait(2)
         end
