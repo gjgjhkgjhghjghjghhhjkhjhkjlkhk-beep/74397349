@@ -235,7 +235,6 @@ for i, name in ipairs(sectionNames) do
     scrollFrame.ScrollBarThickness = 3
     scrollFrame.ScrollBarImageColor3 = COLORS.accent
     scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-    scrollFrame.AutomaticCanvasSize = Enum.AutomaticCanvasSize.Y
     scrollFrame.Parent = container
 
     local scrollLayout = Instance.new("UIListLayout")
