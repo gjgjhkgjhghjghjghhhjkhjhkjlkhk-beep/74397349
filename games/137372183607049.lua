@@ -77,7 +77,7 @@ return function(section, data)
         pcall(function()
             local char = plr.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
-                char:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(44, 5, -78)
+                char:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(44, 5, -85)
                 char:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, 0, 0)
             end
         end)
