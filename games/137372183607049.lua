@@ -22,7 +22,7 @@ return function(section, data)
 
     getgenv().farmActive = false
 
-    local fishZoneCF = CFrame.new(44.133, 5.129, -78)
+    local fishZoneCF = CFrame.new(44.133, 5.129, -90)
 
     local function tpTo(cf)
         pcall(function()
