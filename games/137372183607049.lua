@@ -5,14 +5,13 @@ return function(section, data)
     local Players = game:GetService("Players")
     local plr = Players.LocalPlayer
 
-    local Handler = RS:WaitForChild("RemoteHandler")
-    local FishingZone = Handler:WaitForChild("FishingZone")
-    local Fishing = Handler:WaitForChild("Fishing")
-    local FishingFunnel = Handler:WaitForChild("FishingFunnel")
-    local FloatCreate = Handler:WaitForChild("FloatCreate")
-    local FloatUpdate = Handler:WaitForChild("FloatUpdate")
-    local FloatDestroy = Handler:WaitForChild("FloatDestroy")
-    local SharkChaseResult = Handler:WaitForChild("SharkChaseResult")
+    local Handler = RS:WaitForChild("RemoteHandler", 10)
+    local FishingZone = Handler:WaitForChild("FishingZone", 10)
+    local Fishing = Handler:WaitForChild("Fishing", 10)
+    local FishingFunnel = Handler:WaitForChild("FishingFunnel", 10)
+    local FloatCreate = Handler:WaitForChild("FloatCreate", 10)
+    local FloatDestroy = Handler:WaitForChild("FloatDestroy", 10)
+    local SharkChaseResult = Handler:WaitForChild("SharkChaseResult", 10)
 
     local setdata = data[tostring(game.PlaceId)] or {}
     setdata.autoFarm = setdata.autoFarm or false
