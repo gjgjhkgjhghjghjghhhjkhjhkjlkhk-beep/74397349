@@ -247,7 +247,8 @@ for i, name in ipairs(sectionNames) do
     end)
 
     scrollFrame.ChildAdded:Connect(function()
-        task.defer(function()
+        task.spawn(function()
+            task.wait(0.15)
             scrollFrame.CanvasSize = UDim2.new(0, 0, 0, scrollLayout.AbsoluteContentSize.Y + 20)
         end)
     end)
@@ -346,6 +347,16 @@ function switchSection(name)
     ts:Create(newTab.indicator, TweenInfo.new(0.2), {Transparency = 0}):Play()
 
     curSection = name
+
+    local scroll = new.scroll
+    if scroll then
+        local layout = scroll:FindFirstChildOfClass("UIListLayout")
+        if layout then
+            task.defer(function()
+                scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 20)
+            end)
+        end
+    end
 end
 
 hideBtn.MouseButton1Click:Connect(function()
