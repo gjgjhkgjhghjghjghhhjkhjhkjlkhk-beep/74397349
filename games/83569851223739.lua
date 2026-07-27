@@ -1,4 +1,4 @@
-﻿-- +1 speed evolve
+-- +1 speed evolve
 
 return function(section, data)
     local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()

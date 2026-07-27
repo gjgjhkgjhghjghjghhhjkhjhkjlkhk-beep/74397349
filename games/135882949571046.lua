@@ -1,4 +1,4 @@
-﻿-- dream for brainrots
+-- dream for brainrots
 
 return function(section, data)
     local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()

@@ -1,4 +1,4 @@
-﻿-- Survive flood for brainrots
+-- Survive flood for brainrots
 
 return function(section, data)
     local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()

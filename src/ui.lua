@@ -573,6 +573,9 @@ warn("[Universal] gamePath type: " .. type(gamePath) .. " len: " .. tostring(gam
 warn("[Universal] gamePath start: " .. tostring(gamePath and string.sub(gamePath, 1, 100) or "nil"))
 
 if gamePath and #gamePath > 3 then
+    if string.byte(gamePath, 1) == 0xEF and string.byte(gamePath, 2) == 0xBB and string.byte(gamePath, 3) == 0xBF then
+        gamePath = string.sub(gamePath, 4)
+    end
     local returnPos = string.find(gamePath, "return%s")
     if returnPos then
         gamePath = string.sub(gamePath, returnPos)

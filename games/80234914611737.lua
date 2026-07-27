@@ -1,4 +1,4 @@
-﻿-- +1 Jetpack for Brainrots
+-- +1 Jetpack for Brainrots
 
 return function(section, data)
     local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()

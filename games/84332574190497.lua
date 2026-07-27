@@ -1,4 +1,4 @@
-﻿-- +1 Wings for brainrot
+-- +1 Wings for brainrot
 -- Developed by wirlypirly12
 
 return (function(section, data)

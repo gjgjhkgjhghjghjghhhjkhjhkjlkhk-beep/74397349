@@ -1,4 +1,4 @@
-﻿-- hack vault for brainrots
+-- hack vault for brainrots
 
 return function(section, data)
     local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()

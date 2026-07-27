@@ -1,4 +1,4 @@
-﻿-- fly for brainrots
+-- fly for brainrots
 
 return function(section, data)
     local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()

@@ -1,4 +1,4 @@
-﻿return function(section, data)
+return function(section, data)
     local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua?v=" .. tick()))()
     if not elements then warn("[Universal] Elements not loaded for +1 Speed") return end
 

@@ -1,4 +1,4 @@
-﻿-- paper plane for brainrot
+-- paper plane for brainrot
 
 return function(section, data)
     local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()
