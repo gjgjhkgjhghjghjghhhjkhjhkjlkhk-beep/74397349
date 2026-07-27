@@ -526,7 +526,7 @@ switchSection("Home")
 
 local savedConfig = {settings = {disable_3d_rendering = false, auto_rejoin_on_kick = false}}
 
-local gameFile = getgitpath("games") .. tostring(game.PlaceId) .. ".lua"
+local gameFile = getgitpath("games") .. tostring(game.PlaceId) .. ".lua?v=" .. tick()
 local ok, gamePath = pcall(function() return game:HttpGet(gameFile) end)
 local gameList = https:JSONDecode(game:HttpGet(getgitpath("src").."gameslist.json?v=" .. tick()))
 
@@ -535,10 +535,17 @@ if not ok or not gamePath or gamePath == "" or gamePath == "404: Not Found" then
         switchSection("GamesList")
     end)
 else
-    pcall(function()
+    local ok2, err2 = pcall(function()
         local gameModule = loadstring(gamePath)()
-        gameModule(sections.Game.scroll, savedConfig)
+        if gameModule then
+            gameModule(sections.Game.scroll, savedConfig)
+        else
+            warn("[Universal] Game script returned nil for PlaceId: " .. tostring(game.PlaceId))
+        end
     end)
+    if not ok2 then
+        warn("[Universal] Game script error: " .. tostring(err2))
+    end
 end
 
 elements:Searchbar(sections.GamesList.scroll)
