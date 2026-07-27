@@ -407,7 +407,7 @@ uis.InputChanged:Connect(function(input)
     end
 end)
 
-elements = loadstring(game:HttpGet(getgitpath("src").."elements.lua?v=" .. tick()))()
+elements = loadstring(game:HttpGet(getgitpath("src").."elements.lua?v=" .. tick()):gsub("^[\239][\187][\191]", ""))()
 _G.elements = elements
 
 local function makeCard(parent, order)
@@ -533,6 +533,10 @@ local gameList = https:JSONDecode(game:HttpGet(getgitpath("src").."gameslist.jso
 warn("[Universal] PlaceId: " .. tostring(game.PlaceId))
 warn("[Universal] gamePath type: " .. type(gamePath) .. " len: " .. tostring(gamePath and #gamePath or 0))
 warn("[Universal] gamePath start: " .. tostring(gamePath and string.sub(gamePath, 1, 100) or "nil"))
+
+if gamePath then
+    gamePath = gamePath:gsub("^[\239][\187][\191]", "")
+end
 
 if not ok or not gamePath or gamePath == "" or gamePath == "404: Not Found" then
     elements:Unsupported(sections.Game.container, function()
