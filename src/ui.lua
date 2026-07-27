@@ -407,7 +407,11 @@ uis.InputChanged:Connect(function(input)
     end
 end)
 
-elements = loadstring(game:HttpGet(getgitpath("src").."elements.lua?v=" .. tick()):gsub("^[\239][\187][\191]", ""))()
+local rawElements = game:HttpGet(getgitpath("src").."elements.lua?v=" .. tick())
+if #rawElements > 3 and string.byte(rawElements, 1) == 0xEF and string.byte(rawElements, 2) == 0xBB and string.byte(rawElements, 3) == 0xBF then
+    rawElements = string.sub(rawElements, 4)
+end
+elements = loadstring(rawElements)()
 _G.elements = elements
 
 local function makeCard(parent, order)
@@ -534,8 +538,11 @@ warn("[Universal] PlaceId: " .. tostring(game.PlaceId))
 warn("[Universal] gamePath type: " .. type(gamePath) .. " len: " .. tostring(gamePath and #gamePath or 0))
 warn("[Universal] gamePath start: " .. tostring(gamePath and string.sub(gamePath, 1, 100) or "nil"))
 
-if gamePath then
-    gamePath = gamePath:gsub("^[\239][\187][\191]", "")
+if gamePath and #gamePath > 3 then
+    local b1, b2, b3 = string.byte(gamePath, 1, 3)
+    if b1 == 0xEF and b2 == 0xBB and b3 == 0xBF then
+        gamePath = string.sub(gamePath, 4)
+    end
 end
 
 if not ok or not gamePath or gamePath == "" or gamePath == "404: Not Found" then
