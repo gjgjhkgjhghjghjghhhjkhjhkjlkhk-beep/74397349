@@ -530,6 +530,10 @@ local gameFile = getgitpath("games") .. tostring(game.PlaceId) .. ".lua?v=" .. t
 local ok, gamePath = pcall(function() return game:HttpGet(gameFile) end)
 local gameList = https:JSONDecode(game:HttpGet(getgitpath("src").."gameslist.json?v=" .. tick()))
 
+warn("[Universal] PlaceId: " .. tostring(game.PlaceId))
+warn("[Universal] gamePath type: " .. type(gamePath) .. " len: " .. tostring(gamePath and #gamePath or 0))
+warn("[Universal] gamePath start: " .. tostring(gamePath and string.sub(gamePath, 1, 100) or "nil"))
+
 if not ok or not gamePath or gamePath == "" or gamePath == "404: Not Found" then
     elements:Unsupported(sections.Game.container, function()
         switchSection("GamesList")
