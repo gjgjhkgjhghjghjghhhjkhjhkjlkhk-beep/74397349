@@ -1,7 +1,7 @@
 -- paper plane for brainrot
 
 return function(section, data)
-    local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()
+    local elements = _G.elements
     local env = getgenv()
     local plr = game:GetService("Players").LocalPlayer
 

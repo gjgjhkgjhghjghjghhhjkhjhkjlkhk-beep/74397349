@@ -1,7 +1,7 @@
 -- parkour run for brainrots
 
 return function(section, data)
-    local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()
+    local elements = _G.elements
     getgenv().farming = false
 
     local setdata = data[tostring(game.PlaceId)] or {}

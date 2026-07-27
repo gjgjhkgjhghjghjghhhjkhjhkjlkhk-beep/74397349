@@ -1,7 +1,7 @@
 -- Survive flood for brainrots
 
 return function(section, data)
-    local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()
+    local elements = _G.elements
 
     local setdata = data[tostring(game.PlaceId)] or {}
     setdata.farmrots = setdata.farmrots or false

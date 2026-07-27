@@ -1,7 +1,7 @@
 -- sail for brainrots
 
 return function(section, data)
-    local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua"))()
+    local elements = _G.elements
     getgenv().Farming = false
     getgenv().Selling = false
     getgenv().ChosenZone = nil
