@@ -242,15 +242,8 @@ for i, name in ipairs(sectionNames) do
     scrollLayout.Padding = UDim.new(0, 6)
     scrollLayout.Parent = scrollFrame
 
-    local scrollPadding = Instance.new("UIPadding")
-    scrollPadding.PaddingTop = UDim.new(0, 4)
-    scrollPadding.PaddingBottom = UDim.new(0, 12)
-    scrollPadding.Parent = scrollFrame
-
-    pcall(function()
-        scrollLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            scrollFrame.CanvasSize = UDim2.new(0, 0, 0, scrollLayout.AbsoluteContentSize.Y + 20)
-        end)
+    scrollLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        scrollFrame.CanvasSize = UDim2.new(0, 0, 0, scrollLayout.AbsoluteContentSize.Y + 20)
     end)
 
     local tabBtn = Instance.new("TextButton")
