@@ -257,8 +257,15 @@ for i, name in ipairs(sectionNames) do
 
     scrollFrame.ChildAdded:Connect(function()
         task.spawn(function()
-            task.wait(0.15)
-            scrollFrame.CanvasSize = UDim2.new(0, 0, 0, scrollLayout.AbsoluteContentSize.Y + 20)
+            for _ = 1, 20 do
+                task.wait(0.1)
+                local size = scrollLayout.AbsoluteContentSize.Y
+                if size > 0 then
+                    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, size + 20)
+                    return
+                end
+            end
+            scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 9999)
         end)
     end)
 
@@ -361,8 +368,16 @@ function switchSection(name)
     if scroll then
         local layout = scroll:FindFirstChildOfClass("UIListLayout")
         if layout then
-            task.defer(function()
-                scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 20)
+            task.spawn(function()
+                for _ = 1, 20 do
+                    task.wait(0.1)
+                    local size = layout.AbsoluteContentSize.Y
+                    if size > 0 then
+                        scroll.CanvasSize = UDim2.new(0, 0, 0, size + 20)
+                        return
+                    end
+                end
+                scroll.CanvasSize = UDim2.new(0, 0, 0, 9999)
             end)
         end
     end
