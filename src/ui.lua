@@ -535,16 +535,14 @@ if not ok or not gamePath or gamePath == "" or gamePath == "404: Not Found" then
         switchSection("GamesList")
     end)
 else
-    local ok2, err2 = pcall(function()
-        local gameModule = loadstring(gamePath)()
-        if gameModule then
-            gameModule(sections.Game.scroll, savedConfig)
-        else
-            warn("[Universal] Game script returned nil for PlaceId: " .. tostring(game.PlaceId))
+    local gameModule, loadErr = loadstring(gamePath)
+    if gameModule then
+        local ok2, err2 = pcall(gameModule, sections.Game.scroll, savedConfig)
+        if not ok2 then
+            warn("[Universal] Game script error: " .. tostring(err2))
         end
-    end)
-    if not ok2 then
-        warn("[Universal] Game script error: " .. tostring(err2))
+    else
+        warn("[Universal] loadstring failed for PlaceId: " .. tostring(game.PlaceId) .. " Error: " .. tostring(loadErr))
     end
 end
 
