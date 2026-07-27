@@ -1,6 +1,6 @@
 return function(section, data)
-    local elements = _G.elements or loadstring(game:HttpGet(getgitpath("src").."elements.lua?v=" .. tick()))()
-    if not elements then warn("[Universal] Elements not loaded for +1 Speed") return end
+    local elements = _G.elements
+    if not elements then warn("[Universal] Elements not loaded") return end
 
     local plr = game:GetService("Players").LocalPlayer
     local RS = game:GetService("ReplicatedStorage")

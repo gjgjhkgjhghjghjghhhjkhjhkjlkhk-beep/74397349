@@ -592,10 +592,23 @@ else
         local ok2, err2 = pcall(gameModule, sections.Game.scroll, savedConfig)
         if not ok2 then
             warn("[Universal] Game script error: " .. tostring(err2))
+        else
+            warn("[Universal] Game script loaded successfully")
         end
     else
         warn("[Universal] loadstring failed for PlaceId: " .. tostring(game.PlaceId) .. " Error: " .. tostring(loadErr))
     end
+
+    task.delay(1, function()
+        local scroll = sections.Game.scroll
+        local layout = scroll:FindFirstChildOfClass("UIListLayout")
+        if layout then
+            scroll.CanvasSize = UDim2.new(0, 0, 0, math.max(layout.AbsoluteContentSize.Y + 20, 9999))
+        end
+        local count = 0
+        for _ in pairs(scroll:GetChildren()) do count = count + 1 end
+        warn("[Universal] Game tab children: " .. tostring(count))
+    end)
 end
 
 elements:Searchbar(sections.GamesList.scroll)
