@@ -246,6 +246,12 @@ for i, name in ipairs(sectionNames) do
         scrollFrame.CanvasSize = UDim2.new(0, 0, 0, scrollLayout.AbsoluteContentSize.Y + 20)
     end)
 
+    scrollFrame.ChildAdded:Connect(function()
+        task.defer(function()
+            scrollFrame.CanvasSize = UDim2.new(0, 0, 0, scrollLayout.AbsoluteContentSize.Y + 20)
+        end)
+    end)
+
     local tabBtn = Instance.new("TextButton")
     tabBtn.Name = name .. "Tab"
     tabBtn.Size = UDim2.new(1, 0, 0, 38)
