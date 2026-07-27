@@ -43,8 +43,7 @@ end
 
 function stuff:Label(str, parent)
     local card = Instance.new("Frame")
-    card.Size = UDim2.new(1, 0, 0, 0)
-    card.AutomaticSize = Enum.AutomaticSize.Y
+    card.Size = UDim2.new(1, 0, 0, 30)
     card.BackgroundColor3 = COLORS.bgCard
     card.BorderSizePixel = 0
     card.Parent = parent
@@ -52,9 +51,8 @@ function stuff:Label(str, parent)
     makeCorner(card)
 
     local lbl = Instance.new("TextLabel")
-    lbl.Size = UDim2.new(1, -16, 0, 0)
-    lbl.AutomaticSize = Enum.AutomaticSize.Y
-    lbl.Position = UDim2.new(0, 8, 0, 8)
+    lbl.Size = UDim2.new(1, -16, 1, 0)
+    lbl.Position = UDim2.new(0, 8, 0, 0)
     lbl.BackgroundTransparency = 1
     lbl.Text = str
     lbl.TextColor3 = COLORS.text
