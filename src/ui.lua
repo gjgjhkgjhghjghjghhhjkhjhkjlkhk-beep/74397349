@@ -1,6 +1,15 @@
 print("[Universal] UI Starting...")
 local getexec = identifyexecutor or function() return "Unknown" end
 
+if not getgenv().getgitpath then
+    local BASE_URL = "https://raw.githubusercontent.com/gjgjhkgjhghjghjghhhjkhjhkjlkhk-beep/74397349/main/"
+    getgenv().getgitpath = function(where)
+        if where == "src" then return BASE_URL .. "src/"
+        elseif where == "games" then return BASE_URL .. "games/"
+        end
+    end
+end
+
 local parent = nil
 pcall(function() parent = gethui() end)
 if not parent then pcall(function() parent = get_hidden_gui() end) end
